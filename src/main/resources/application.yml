@@ -1,0 +1,30 @@
+security:
+  basic:
+    enabled: false
+
+spring:
+  redis:
+    ssl: true
+      
+  jackson:
+    default-property-inclusion: non-null
+    date-format: yyyy-MM-dd HH:mm:ss
+
+# Server
+server:
+  session:
+    cookie:
+      http-only: true
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+
+# Management
+management:
+  add-application-context-header: false
+
+# Logging
+logging:
+  level:
+    root: info
+

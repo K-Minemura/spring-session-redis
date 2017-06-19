@@ -1,6 +1,8 @@
 security:
-  basic:
-    enabled: false
+  user:
+    role:
+    - ADMIN
+    - ACTUATOR
 
 spring:
   redis:

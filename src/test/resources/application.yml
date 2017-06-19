@@ -1,16 +1,17 @@
 security:
   user:
+    name: myuser
+    password: passw0rd
     role:
     - ADMIN
     - ACTUATOR
 
 spring:
-  redis:
-    ssl: true
-      
   jackson:
     default-property-inclusion: non-null
     date-format: yyyy-MM-dd HH:mm:ss
+  session:
+    store-type: hash-map
 
 # Server
 server:

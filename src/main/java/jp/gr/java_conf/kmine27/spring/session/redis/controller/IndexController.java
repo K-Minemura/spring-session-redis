@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @RestController
-@SessionAttributes("timestamp")
+@SessionAttributes(value = {"sessionHolder"})
 public class IndexController {
 
     private final static Logger log = LoggerFactory
@@ -33,15 +36,15 @@ public class IndexController {
     @RequestMapping("/set")
     public ResponseHolder setSession(Model model) {
         String ipAddress = getIpAddress();
-        String timestamp = getTimestamp();
-        model.addAttribute("timestamp", timestamp);
-        return new ResponseHolder(ipAddress, timestamp);
+        SessionHolder sessionHolder = getTimestamp();
+        model.addAttribute("sessionHolder", sessionHolder);
+        return new ResponseHolder(ipAddress, sessionHolder);
     }
 
     @RequestMapping("/get")
-    public ResponseHolder getSession(Model model, String timestamp) {
+    public ResponseHolder getSession(Model model, SessionHolder sessionHolder) {
         String ipAddress = getIpAddress();
-        return new ResponseHolder(ipAddress, timestamp);
+        return new ResponseHolder(ipAddress, sessionHolder);
     }
 
     @RequestMapping("/clear")
@@ -61,8 +64,8 @@ public class IndexController {
         return ipAddress;
     }
     
-    private String getTimestamp() {
-        return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    private SessionHolder getTimestamp() {
+        return new SessionHolder(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 
     @Data
@@ -71,6 +74,19 @@ public class IndexController {
     private static class ResponseHolder implements Serializable {
         private static final long serialVersionUID = 1L;
         private String ipAddress;
+        private SessionHolder timestamp;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class SessionHolder implements Serializable {
+        private static final long serialVersionUID = 1L;
+        @Getter
+        @Setter
         private String timestamp;
+        @Override
+        public String toString() {
+            return timestamp;
+        }
     }
 }
